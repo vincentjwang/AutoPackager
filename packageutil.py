@@ -34,6 +34,8 @@ def generatepackage(dirlist, compilelist):
         else:
             newfilelist.append((filegenerator.gettemplatefiles(d[0]), d[1]))
 
+    #this method need be refactory
+
     for i in range(0, len(dirlist)):
         if len(dirlist) > 1 and i == len(dirlist) - 1:
             updatedfiles = filegenerator.getupdatedtfiles(oldfilelist[i][0], newfilelist[i][0])
