@@ -1,4 +1,6 @@
-import os, shutil, filegenerator
+import os, shutil, filegenerator, pickle
+
+DEPLOY_PICKLE = 'deploydata.pickle'
 
 def getfiles(dirlist):
     filelist = []
@@ -9,13 +11,17 @@ def getfiles(dirlist):
             filelist.append((filegenerator.gettemplatefiles(d[0]), d[1]))
     return filelist
 
-def generatepackage(dirlist, compilelist):
-    oldfilelist = getfiles(dirlist)
-    mockupmsbuild()
-    newfilelist = getfiles(dirlist)
-    
-    #this method need be refactory
+def serializefiles(dirlist):
+    deployfiles = getfiles(dirlist)
+    with open(DEPLOY_PICKLE, 'wb') as f:
+        pickle.dump(deployfiles, f, pickle.HIGHEST_PROTOCOL)
 
+def generatepackage(dirlist):
+    oldfilelist = []
+    with open(DEPLOY_PICKLE, 'rb') as f:
+        oldfilelist = pickle.load(f)
+    mockupfileupdate()
+    newfilelist = getfiles(dirlist)
     for i in range(0, len(dirlist)):
         if len(dirlist[i]) == 3:
             updatedfiles = filegenerator.getupdatedcfiles(oldfilelist[i][0], newfilelist[i][0])
@@ -34,7 +40,7 @@ def generatepackage(dirlist, compilelist):
                     shutil.copy(key, targetpath)
             
 
-def mockupmsbuild():
+def mockupfileupdate():
     f = open(r'D:\VSTS\01_PO\03_Code\01_SourceCode\Silverlight PO Restful\NeweggCentral\ClientBin\NeweggCental.xap.txt', 'w')
     f.write('456')
     f.close()
