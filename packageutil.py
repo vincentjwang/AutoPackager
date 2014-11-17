@@ -1,12 +1,16 @@
 import os, shutil, filegenerator
 
-def generatepackage(dirlist, compilelist):
-    oldfilelist = []
+def getfiles(dirlist):
+    filelist = []
     for d in dirlist:
         if len(d) == 3:
-            oldfilelist.append((filegenerator.getcompiledfiles(d[0], d[2]), d[1]))
+            filelist.append((filegenerator.getcompiledfiles(d[0], d[2]), d[1]))
         else:
-            oldfilelist.append((filegenerator.gettemplatefiles(d[0]), d[1]))
+            filelist.append((filegenerator.gettemplatefiles(d[0]), d[1]))
+    return filelist
+
+def generatepackage(dirlist, compilelist):
+    oldfilelist = getfiles(dirlist)
             
     # mock msbuild compile
     f = open(r'D:\VSTS\01_PO\03_Code\01_SourceCode\Silverlight PO Restful\NeweggCentral\ClientBin\NeweggCental.xap.txt', 'w')
@@ -27,12 +31,7 @@ def generatepackage(dirlist, compilelist):
     f.write('vendor ssb template')
     f.close()
     
-    newfilelist = []
-    for d in dirlist:
-        if len(d) == 3:
-            newfilelist.append((filegenerator.getcompiledfiles(d[0], d[2]), d[1]))
-        else:
-            newfilelist.append((filegenerator.gettemplatefiles(d[0]), d[1]))
+    newfilelist = getfiles(dirlist)
 
     #this method need be refactory
 
@@ -52,9 +51,3 @@ def generatepackage(dirlist, compilelist):
                     os.makedirs(dirlist[i][1])
                 for f in updatedfiles:
                     shutil.copy(f, dirlist[i][1])
-            
-        
-
-    
-        
-    
