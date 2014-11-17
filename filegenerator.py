@@ -22,7 +22,7 @@ def gettemplatefiles(dirpath):
 def getupdatedcfiles(oldfiles, newfiles):
     updatedfiles = [] 
     for key, value in newfiles.items():
-        if oldfiles.has_key(key):
+        if key in oldfiles:
             oldvalue = oldfiles[key]
             if value[0] != oldvalue[0] or value[1] > oldvalue[1]:
                 updatedfiles.append(key)
@@ -34,7 +34,7 @@ def getupdatedcfiles(oldfiles, newfiles):
 def getupdatedtfiles(oldfiles, newfiles):
     updatedfiles = {}
     for key, value in newfiles.items():
-        if oldfiles.has_key(key):
+        if key in oldfiles:
             oldvalue = oldfiles[key]
             if value[0] != oldvalue[0] or value[1] > oldvalue[1]:
                 updatedfiles[key] = value[2]
